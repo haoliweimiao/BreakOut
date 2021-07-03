@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <string>
 #include <fstream>
+#include <iostream>
 
 #ifdef __cplusplus
 extern "C"
