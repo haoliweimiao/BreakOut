@@ -11,6 +11,12 @@
 #include "game_level.h"
 #include <vector>
 
+#define SHADER_NAME_SPRITE "sprite"
+#define TEXTURE_NAME_FACE "face"
+#define TEXTURE_NAME_BACKGROUND "background"
+#define TEXTURE_NAME_BLOCK "block"
+#define TEXTURE_NAME_BLOCK_SOLID "block_solid"
+
 #ifdef __cplusplus
 extern "C"
 {
