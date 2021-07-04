@@ -13,6 +13,7 @@
 #include <fstream>
 
 #include <stb/stb_include.h>
+#include <utils/file_utils.h>
 
 // Instantiate static variables
 std::map<std::string, Texture2D> ResourceManager::Textures;
@@ -24,7 +25,7 @@ Shader ResourceManager::LoadShader(const GLchar *vShaderFile, const GLchar *fSha
     return Shaders[name];
 }
 
-Shader ResourceManager::GetShader(std::string name)
+Shader &ResourceManager::GetShader(std::string name)
 {
     return Shaders[name];
 }
@@ -35,7 +36,7 @@ Texture2D ResourceManager::LoadTexture(const GLchar *file, GLboolean alpha, std:
     return Textures[name];
 }
 
-Texture2D ResourceManager::GetTexture(std::string name)
+Texture2D &ResourceManager::GetTexture(std::string name)
 {
     return Textures[name];
 }
@@ -58,9 +59,24 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
     std::string geometryCode;
     try
     {
+
+        char vfile[256];
+        getFilePath(vShaderFile, vfile);
+        if (vfile == NULL)
+        {
+            std::cout << "load vertex shader file failed !" << std::endl;
+        }
+
+        char ffile[256];
+        getFilePath(fShaderFile, ffile);
+        if (ffile == NULL)
+        {
+            std::cout << "load fragment shader file failed !" << std::endl;
+        }
+
         // Open files
-        std::ifstream vertexShaderFile(vShaderFile);
-        std::ifstream fragmentShaderFile(fShaderFile);
+        std::ifstream vertexShaderFile(vfile);
+        std::ifstream fragmentShaderFile(ffile);
         std::stringstream vShaderStream, fShaderStream;
         // Read file's buffer contents into streams
         vShaderStream << vertexShaderFile.rdbuf();
@@ -71,6 +87,10 @@ Shader ResourceManager::loadShaderFromFile(const GLchar *vShaderFile, const GLch
         // Convert stream into string
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
+        std::cout << " load vertex shader\n"
+                  << vertexCode << std::endl;
+        std::cout << " load fragment shader\n"
+                  << fragmentCode << std::endl;
         // If geometry shader path is present, also load a geometry shader
         if (gShaderFile != nullptr)
         {
