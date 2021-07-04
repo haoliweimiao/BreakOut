@@ -8,6 +8,9 @@
 #define GAME_H
 // include something
 #include "single_import.h"
+#include "game_level.h"
+#include <vector>
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -28,6 +31,8 @@ extern "C"
         GameState State;
         GLboolean Keys[1024];
         GLuint Width, Height;
+        std::vector<GameLevel> Levels;
+        GLuint Level;
         // 构造函数/析构函数
         Game(GLuint width, GLuint height);
         ~Game();
