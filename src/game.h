@@ -21,6 +21,7 @@
 extern "C"
 {
 #endif
+
     // your code
     // 代表了游戏的当前状态
     enum GameState
@@ -48,6 +49,7 @@ extern "C"
         void ProcessInput(GLfloat dt);
         void Update(GLfloat dt);
         void Render();
+        void DoCollisions();
     };
 #ifdef __cplusplus
 }

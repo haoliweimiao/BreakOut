@@ -11,6 +11,10 @@
 #include "game.h"
 #include "resource_manager.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 // GLFW function declerations
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
 
@@ -23,6 +27,7 @@ Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 int main(int argc, char *argv[])
 {
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
