@@ -11,11 +11,13 @@
 #include "sprite_renderer.h"
 #include "game_object.h"
 #include "ball_object.h"
+#include "particle_generator.h"
 
 // Game-related State data
 SpriteRenderer *Renderer;
 GameObject *Player;
 BallObject *Ball;
+ParticleGenerator *Particles;
 
 Game::Game(GLuint width, GLuint height)
     : State(GAME_ACTIVE), Keys(), Width(width), Height(height)
@@ -27,12 +29,14 @@ Game::~Game()
     delete Renderer;
     delete Player;
     delete Ball;
+    delete Particles;
 }
 
 void Game::Init()
 {
     // Load shaders
     ResourceManager::LoadShader("shaders/sprite.vs", "shaders/sprite.frag", nullptr, SHADER_NAME_SPRITE);
+    ResourceManager::LoadShader("shaders/particle.vs", "shaders/particle.frag", nullptr, SHADER_NAME_PARTICLE);
     // Configure shaders
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f);
     ResourceManager::GetShader(SHADER_NAME_SPRITE).Use().SetInteger("image", 0);
@@ -40,9 +44,15 @@ void Game::Init()
     // Load textures
     ResourceManager::LoadTexture("textures/awesomeface.png", GL_TRUE, TEXTURE_NAME_FACE);
     ResourceManager::LoadTexture("textures/paddle.png", true, "paddle");
+    ResourceManager::LoadTexture("textures/particle.png", GL_TRUE, SHADER_NAME_PARTICLE);
     // Set render-specific controls
     Shader shader = ResourceManager::GetShader(SHADER_NAME_SPRITE);
     Renderer = new SpriteRenderer(shader);
+
+    Particles = new ParticleGenerator(
+        ResourceManager::GetShader(SHADER_NAME_PARTICLE),
+        ResourceManager::GetTexture(SHADER_NAME_PARTICLE),
+        500);
 
     // 加载纹理
     ResourceManager::LoadTexture("textures/background.jpg", GL_FALSE, TEXTURE_NAME_BACKGROUND);
@@ -82,6 +92,8 @@ void Game::Update(GLfloat dt)
     Ball->Move(dt, this->Width);
     // Check for collisions
     this->DoCollisions();
+    // Update particles
+    Particles->Update(dt, *Ball, 2, glm::vec2(Ball->Radius / 2));
     // Check loss condition
     if (Ball->Position.y >= this->Height) // Did ball reach bottom edge?
     {
@@ -129,6 +141,8 @@ void Game::Render()
         this->Levels[this->Level].Draw(*Renderer);
         // Draw player
         Player->Draw(*Renderer);
+        // Draw particles
+        Particles->Draw();
         // Draw ball
         Ball->Draw(*Renderer);
     }
