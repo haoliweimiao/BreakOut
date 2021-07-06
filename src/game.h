@@ -17,6 +17,7 @@
 #include "game_level.h"
 #define SHADER_NAME_SPRITE "sprite"
 #define SHADER_NAME_PARTICLE "particle"
+#define SHADER_NAME_POST_PROCESSING "postprocessing"
 
 #define TEXTURE_NAME_FACE "face"
 #define TEXTURE_NAME_BACKGROUND "background"
