@@ -41,6 +41,8 @@ void Game::Init()
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f);
     ResourceManager::GetShader(SHADER_NAME_SPRITE).Use().SetInteger("image", 0);
     ResourceManager::GetShader(SHADER_NAME_SPRITE).SetMatrix4("projection", projection);
+    ResourceManager::GetShader(SHADER_NAME_PARTICLE).Use().SetInteger("sprite", 0);
+    ResourceManager::GetShader(SHADER_NAME_PARTICLE).SetMatrix4("projection", projection);
     // Load textures
     ResourceManager::LoadTexture("textures/awesomeface.png", GL_TRUE, TEXTURE_NAME_FACE);
     ResourceManager::LoadTexture("textures/paddle.png", true, "paddle");
