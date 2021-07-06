@@ -14,15 +14,9 @@
 #include "single_import.h"
 #include <GLFW/glfw3.h>
 
+#include "game_object.h"
 #include "game_level.h"
-#define SHADER_NAME_SPRITE "sprite"
-#define SHADER_NAME_PARTICLE "particle"
-#define SHADER_NAME_POST_PROCESSING "postprocessing"
-
-#define TEXTURE_NAME_FACE "face"
-#define TEXTURE_NAME_BACKGROUND "background"
-#define TEXTURE_NAME_BLOCK "block"
-#define TEXTURE_NAME_BLOCK_SOLID "block_solid"
+#include "power_up.h"
 
 // Represents the current state of the game
 enum GameState
@@ -64,6 +58,7 @@ public:
     GLuint Width, Height;
     std::vector<GameLevel> Levels;
     GLuint Level;
+    std::vector<PowerUp> PowerUps;
     // Constructor/Destructor
     Game(GLuint width, GLuint height);
     ~Game();
@@ -77,6 +72,9 @@ public:
     // Reset
     void ResetLevel();
     void ResetPlayer();
+    // Powerups
+    void SpawnPowerUps(GameObject &block);
+    void UpdatePowerUps(GLfloat dt);
 };
 
 #endif
