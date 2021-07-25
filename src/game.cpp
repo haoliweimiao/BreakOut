@@ -139,6 +139,11 @@ void Game::ProcessInput(GLfloat dt)
         }
         if (this->Keys[GLFW_KEY_SPACE])
             Ball->Stuck = GL_FALSE;
+
+        if (this->Keys[GLFW_KEY_K])
+        {
+            this->PowerUps.push_back(PowerUp("pass-through", glm::vec3(0.5f, 1.0f, 0.5f), 10.0f, glm::vec2(Width / 2.0f, Height / 2.0f), ResourceManager::GetTexture("powerup_passthrough")));
+        }
     }
 }
 
@@ -171,6 +176,8 @@ void Game::Render()
 
 void Game::ResetLevel()
 {
+    this->PowerUps.clear();
+
     if (this->Level == 0)
         this->Levels[0].Load("levels/one.lvl", this->Width, this->Height * 0.5f);
     else if (this->Level == 1)
@@ -336,8 +343,12 @@ void Game::DoCollisions()
                 // Destroy block if not solid
                 if (!box.IsSolid)
                 {
-                    box.Destroyed = GL_TRUE;
-                    this->SpawnPowerUps(box);
+                    box.Hardness--;
+                    if (box.Hardness <= 0)
+                    {
+                        box.Destroyed = GL_TRUE;
+                        this->SpawnPowerUps(box);
+                    }
                 }
                 else
                 { // if block is solid, enable shake effect
