@@ -6,7 +6,7 @@ set(PROJECT_NAME BreakOut)
 # 项目信息
 project(${PROJECT_NAME})
 
-set(VERSION "0.1.11")
+set(VERSION "0.1.12")
 
 add_definitions("-Wall -g")
 
@@ -46,4 +46,5 @@ target_link_libraries(
     libglfw3.a 
     libglfw3dll.a 
     libglad.a
+    libfreetype.a
     )

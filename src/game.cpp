@@ -15,6 +15,7 @@
 #include "ball_object.h"
 #include "particle_generator.h"
 #include "post_processor.h"
+#include "text_manager.h"
 
 // Game-related State data
 SpriteRenderer *Renderer;
@@ -22,6 +23,7 @@ GameObject *Player;
 BallObject *Ball;
 ParticleGenerator *Particles;
 PostProcessor *Effects;
+TextManager *Texts;
 GLfloat ShakeTime = 0.0f;
 
 Game::Game(GLuint width, GLuint height)
@@ -36,6 +38,7 @@ Game::~Game()
     delete Ball;
     delete Particles;
     delete Effects;
+    delete Texts;
 }
 
 void Game::Init()
@@ -86,6 +89,9 @@ void Game::Init()
     Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("paddle"));
     glm::vec2 ballPos = playerPos + glm::vec2(PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2);
     Ball = new BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::GetTexture("face"));
+
+    Texts = new TextManager();
+    Texts->Init(this->Width, this->Height);
 }
 
 void Game::Update(GLfloat dt)
@@ -171,6 +177,8 @@ void Game::Render()
         Effects->EndRender();
         // Render postprocessing quad
         Effects->Render(glfwGetTime());
+
+        Texts->RenderText("BreakOut", 0.0f, 580.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
     }
 }
 
