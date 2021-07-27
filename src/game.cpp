@@ -16,6 +16,7 @@
 #include "particle_generator.h"
 #include "post_processor.h"
 #include "text_manager.h"
+#include "progress_renderer.h"
 
 // Game-related State data
 SpriteRenderer *Renderer;
@@ -24,6 +25,7 @@ BallObject *Ball;
 ParticleGenerator *Particles;
 PostProcessor *Effects;
 TextManager *Texts;
+ProgressRenderer *Progress;
 GLfloat ShakeTime = 0.0f;
 
 Game::Game(GLuint width, GLuint height)
@@ -39,6 +41,7 @@ Game::~Game()
     delete Particles;
     delete Effects;
     delete Texts;
+    delete Progress;
 }
 
 void Game::Init()
@@ -47,12 +50,16 @@ void Game::Init()
     ResourceManager::LoadShader("shaders/sprite.vs", "shaders/sprite.frag", nullptr, "sprite");
     ResourceManager::LoadShader("shaders/particle.vs", "shaders/particle.frag", nullptr, "particle");
     ResourceManager::LoadShader("shaders/post_processing.vs", "shaders/post_processing.frag", nullptr, "postprocessing");
+    ResourceManager::LoadShader("shaders/progress.vs", "shaders/progress.frag", nullptr, "progress");
+
     // Configure shaders
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f);
     ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     ResourceManager::GetShader("particle").Use().SetInteger("sprite", 0);
     ResourceManager::GetShader("particle").SetMatrix4("projection", projection);
+    ResourceManager::GetShader("progress").Use().SetInteger("sprite", 0);
+    ResourceManager::GetShader("progress").SetMatrix4("projection", projection);
     // Load textures
     ResourceManager::LoadTexture("textures/background.jpg", GL_FALSE, "background");
     ResourceManager::LoadTexture("textures/awesomeface.png", GL_TRUE, "face");
@@ -70,6 +77,7 @@ void Game::Init()
     Renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
     Particles = new ParticleGenerator(ResourceManager::GetShader("particle"), ResourceManager::GetTexture("particle"), 500);
     Effects = new PostProcessor(ResourceManager::GetShader("postprocessing"), this->Width, this->Height);
+    Progress = new ProgressRenderer(ResourceManager::GetShader("progress"));
     // Load levels
     GameLevel one;
     one.Load("levels/one.lvl", this->Width, this->Height * 0.5);
@@ -177,7 +185,7 @@ void Game::Render()
         Effects->EndRender();
         // Render postprocessing quad
         Effects->Render(glfwGetTime());
-
+        Progress->DrawProgress(0.3f, glm::vec2(0, 0), glm::vec2(60, 25), 0);
         Texts->RenderText("BreakOut", 0.0f, 580.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
     }
 }
