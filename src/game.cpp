@@ -160,7 +160,7 @@ void Game::ProcessInput(GLfloat dt)
         }
     }
 }
-
+double mStartTime = glfwGetTime();
 void Game::Render()
 {
     if (this->State == GAME_ACTIVE)
@@ -185,8 +185,19 @@ void Game::Render()
         Effects->EndRender();
         // Render postprocessing quad
         Effects->Render(glfwGetTime());
-        Progress->DrawProgress(0.3f, glm::vec2(0, 0), glm::vec2(60, 25), 0);
         Texts->RenderText("BreakOut", 0.0f, 580.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+
+        // double nowTime = glfwGetTime();
+        // std::cout << "now time " << nowTime << std::endl;
+
+        // if (nowTime - mStartTime > 3)
+        // {
+        //     mStartTime = nowTime;
+        // }
+        // double progress = (nowTime - mStartTime) / 3.0f;
+        // Progress->SetBackgroundColor(glm::vec3(0.0f, progress / 3.0f, 0.0f));
+        // Progress->SetTimeLeftColor(glm::vec3(0.0f, 0.0f, progress / 3.0f));
+        // Progress->DrawProgress(progress, glm::vec2(0, 0), glm::vec2(60, 25), 0);
     }
 }
 

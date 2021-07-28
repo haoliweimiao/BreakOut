@@ -28,6 +28,8 @@ extern "C"
         ~ProgressRenderer();
         // Renders a defined quad textured with given sprite
         void DrawProgress(GLfloat timeLeft, glm::vec2 position, glm::vec2 size = glm::vec2(10, 10), GLfloat rotate = 0.0f);
+        void SetBackgroundColor(glm::vec3 bgColor);
+        void SetTimeLeftColor(glm::vec3 tlColor);
 
     private:
         // Render state

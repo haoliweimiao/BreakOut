@@ -12,6 +12,15 @@ ProgressRenderer::~ProgressRenderer()
     glDeleteVertexArrays(1, &this->quadVAO);
 }
 
+void ProgressRenderer::SetBackgroundColor(glm::vec3 bgColor)
+{
+    this->progressBGColor = bgColor;
+}
+void ProgressRenderer::SetTimeLeftColor(glm::vec3 tlColor)
+{
+    this->timeLeftColor = tlColor;
+}
+
 void ProgressRenderer::DrawProgress(GLfloat timeLeft, glm::vec2 position, glm::vec2 size, GLfloat rotate)
 {
     // Prepare transformations
