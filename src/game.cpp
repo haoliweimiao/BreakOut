@@ -17,6 +17,7 @@
 #include "post_processor.h"
 #include "text_manager.h"
 #include "progress_renderer.h"
+#include "rect_renderer.h"
 
 // Game-related State data
 SpriteRenderer *Renderer;
@@ -26,6 +27,7 @@ ParticleGenerator *Particles;
 PostProcessor *Effects;
 TextManager *Texts;
 ProgressRenderer *Progress;
+RectRenderer *Rect;
 GLfloat ShakeTime = 0.0f;
 
 Game::Game(GLuint width, GLuint height)
@@ -42,6 +44,7 @@ Game::~Game()
     delete Effects;
     delete Texts;
     delete Progress;
+    delete Rect;
 }
 
 void Game::Init()
@@ -51,6 +54,7 @@ void Game::Init()
     ResourceManager::LoadShader("shaders/particle.vs", "shaders/particle.frag", nullptr, "particle");
     ResourceManager::LoadShader("shaders/post_processing.vs", "shaders/post_processing.frag", nullptr, "postprocessing");
     ResourceManager::LoadShader("shaders/progress.vs", "shaders/progress.frag", nullptr, "progress");
+    ResourceManager::LoadShader("shaders/rect.vs", "shaders/rect.frag", nullptr, "rect");
 
     // Configure shaders
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(this->Width), static_cast<GLfloat>(this->Height), 0.0f, -1.0f, 1.0f);
@@ -60,6 +64,8 @@ void Game::Init()
     ResourceManager::GetShader("particle").SetMatrix4("projection", projection);
     ResourceManager::GetShader("progress").Use().SetInteger("sprite", 0);
     ResourceManager::GetShader("progress").SetMatrix4("projection", projection);
+    ResourceManager::GetShader("rect").Use().SetInteger("rect", 0);
+    ResourceManager::GetShader("rect").SetMatrix4("projection", projection);
     // Load textures
     ResourceManager::LoadTexture("textures/background.jpg", GL_FALSE, "background");
     ResourceManager::LoadTexture("textures/awesomeface.png", GL_TRUE, "face");
@@ -78,6 +84,7 @@ void Game::Init()
     Particles = new ParticleGenerator(ResourceManager::GetShader("particle"), ResourceManager::GetTexture("particle"), 500);
     Effects = new PostProcessor(ResourceManager::GetShader("postprocessing"), this->Width, this->Height);
     Progress = new ProgressRenderer(ResourceManager::GetShader("progress"));
+    Rect = new RectRenderer(ResourceManager::GetShader("rect"));
     // Load levels
     GameLevel one;
     one.Load("levels/one.lvl", this->Width, this->Height * 0.5);
@@ -198,6 +205,8 @@ void Game::Render()
         // Progress->SetBackgroundColor(glm::vec3(0.0f, progress / 3.0f, 0.0f));
         // Progress->SetTimeLeftColor(glm::vec3(0.0f, 0.0f, progress / 3.0f));
         // Progress->DrawProgress(progress, glm::vec2(0, 0), glm::vec2(60, 25), 0);
+
+        // Rect->DrawRect(glm::vec2(233, 233), glm::vec2(200, 200));
     }
 }
 
