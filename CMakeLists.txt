@@ -6,7 +6,7 @@ set(PROJECT_NAME BreakOut)
 # 项目信息
 project(${PROJECT_NAME})
 
-set(VERSION "0.1.15")
+set(VERSION "0.1.16")
 
 add_definitions("-Wall -g")
 

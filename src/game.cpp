@@ -18,6 +18,7 @@
 #include "text_manager.h"
 #include "progress_renderer.h"
 #include "rect_renderer.h"
+#include "constants.h"
 
 // Game-related State data
 SpriteRenderer *Renderer;
@@ -192,7 +193,12 @@ void Game::Render()
         Effects->EndRender();
         // Render postprocessing quad
         Effects->Render(glfwGetTime());
-        Texts->RenderText("BreakOut", 0.0f, 580.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+
+        int textLen = wcslen(TEXT_GAME_NAME) + 1;
+        Texts->LoadFacesByUnicode(TEXT_GAME_NAME, textLen);
+        Texts->RenderText(TEXT_GAME_NAME, textLen, 0.0f, 580.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+        // Texts->RenderText("BreakOut", 0.0f, 580.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+        // Texts->RenderTextFromFile("fonts/content.txt", 0.0f, 580.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 
         // double nowTime = glfwGetTime();
         // std::cout << "now time " << nowTime << std::endl;

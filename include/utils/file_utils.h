@@ -49,24 +49,28 @@ extern "C"
         return (stat(name.c_str(), &buffer) == 0);
     }
 
-    inline void getFilePath(char const *path, char *returnPath)
+    inline bool getFilePath(char const *path, char *returnPath)
     {
         memset(returnPath, 0, 256);
         strcat(returnPath, "./");
         strcat(returnPath, path);
-        std::cout << "start check file exist: " << returnPath << std::endl;
+        // std::cout << "start check file exist: " << returnPath << std::endl;
         if (!existsByStat(returnPath))
         {
             memset(returnPath, 0, 256);
             strcat(returnPath, "../");
             strcat(returnPath, path);
-            std::cout << "start check file exist: " << returnPath << std::endl;
+            // std::cout << "start check file exist: " << returnPath << std::endl;
             if (!existsByStat(returnPath))
             {
-                std::cout << "load file failed !" << std::endl;
+                memset(returnPath, 0, 256);
+                std::cout << "load file: " << path << " failed !" << std::endl;
                 returnPath = NULL;
+                return false;
             }
         }
+
+        return true;
     }
 
 #ifdef __cplusplus

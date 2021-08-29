@@ -9,13 +9,18 @@
 // include something
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <freetype/ftglyph.h>
 
+#include <stdio.h>
 #include <string>
 #include <iostream>
 #include <map>
 #include <utils/file_utils.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
+#include <stdlib.h>
+#include <string>
 
 #include "single_import.h"
 #include "shader.h"
@@ -41,11 +46,18 @@ extern "C"
         // Constructor
         TextManager() {}
         void Init(int width, int height);
+        void LoadFacesByUnicode(const wchar_t *text, int size);
         // Sets the current shader as active
         TextManager &Use();
-        std::map<GLchar, Character> Characters;
+        std::map<wchar_t, Character> Characters;
         GLuint VAO, VBO;
         void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+        void RenderText(const wchar_t *text, int textLen, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+        void RenderTextFromFile(const char *file, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+
+    private:
+        int Width;
+        int Height;
     };
 
 #ifdef __cplusplus
